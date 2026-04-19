@@ -1,0 +1,22 @@
+code english
+
+func result<int, string> safe_divide(int a, int b) returns result<int, string> [:
+    if b == 0 [:
+        return error("division by zero")
+    :]
+    return ok(a / b)
+:]
+
+result<int, string> r = safe_divide(10, 2)
+if r.ok [:
+    print("Result: " + r.value)
+:] else [:
+    print("Error: " + r.error)
+:]
+
+result<int, string> bad = safe_divide(5, 0)
+if bad.ok [:
+    print("Should not reach here")
+:] else [:
+    print("Caught error: " + bad.error)
+:]

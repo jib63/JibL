@@ -1,0 +1,8 @@
+code français
+
+fonc vide saluer(chaine nom) retourne vide [:
+    afficher("Bonjour, " + nom + " !")
+:]
+
+const chaine QUI = "Monde"
+appel saluer(QUI)

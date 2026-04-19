@@ -1,0 +1,14 @@
+code english
+
+@@@
+    AI ask() example.
+    Requires: JIBL_AI_PROVIDER and JIBL_AI_KEY environment variables.
+    Example:
+        export JIBL_AI_PROVIDER=anthropic
+        export JIBL_AI_KEY=sk-ant-...
+        ./jibl examples/ai_ask_en.jibl
+@@@
+
+ai_response r = ask("In one sentence, what is a programming language?")
+print("AI says: " + r.content)
+print("Model: " + r.model)

@@ -1,0 +1,8 @@
+code español
+
+func vacio saludar(cadena nombre) retorna vacio [:
+    mostrar("¡Hola, " + nombre + "!")
+:]
+
+const cadena QUIEN = "Mundo"
+llamar saludar(QUIEN)

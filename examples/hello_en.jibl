@@ -1,0 +1,8 @@
+code english
+
+func void greet(string name) returns void [:
+    print("Hello, " + name + "!")
+:]
+
+const string WHO = "World"
+call greet(WHO)

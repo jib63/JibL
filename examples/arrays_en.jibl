@@ -1,0 +1,18 @@
+code english
+
+@@ Array operations example
+
+int[] scores = [10, 20, 30, 40, 50]
+print("Length: " + len(scores))
+print("First: " + scores[0])
+
+@@ Append new element
+set scores = append(scores, 60)
+print("After append, length: " + len(scores))
+
+@@ Iterate with while
+int i = 0
+while i < len(scores) [:
+    print("scores[" + i + "] = " + scores[i])
+    set i = i + 1
+:]

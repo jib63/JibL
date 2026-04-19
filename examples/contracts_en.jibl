@@ -1,0 +1,15 @@
+code english
+
+@@ Demonstrates requires / ensures contracts
+
+func int divide(int a, int b) returns int
+    requires b != 0
+[:
+    return a / b
+:]
+
+int quotient = divide(10, 2)
+print("10 / 2 = " + quotient)
+
+@@ This call would trigger the requires contract violation:
+@@ int bad = divide(5, 0)
