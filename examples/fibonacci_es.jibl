@@ -1,0 +1,54 @@
+code español
+
+@@ Fibonacci — recursivo e iterativo, con contratos
+
+@@ Enfoque recursivo: elegante pero O(2^n)
+func entero fib_recursivo(entero n) retorna entero
+    requiere n >= 0
+[:
+    si n <= 1 [:
+        retorno n
+    :]
+    retorno fib_recursivo(n - 1) + fib_recursivo(n - 2)
+:]
+
+@@ Enfoque iterativo: O(n) usando un bucle mientras
+func entero fib_iterativo(entero n) retorna entero
+    requiere n >= 0
+[:
+    si n <= 1 [:
+        retorno n
+    :]
+    entero anterior = 0
+    entero actual = 1
+    entero paso = 2
+    mientras paso <= n [:
+        entero siguiente = anterior + actual
+        set anterior = actual
+        set actual = siguiente
+        set paso = paso + 1
+    :]
+    retorno actual
+:]
+
+mostrar("Sucesión de Fibonacci (primeros 11 términos):")
+mostrar("")
+
+entero i = 0
+mientras i <= 10 [:
+    mostrar("  fib(" + i + ") = " + fib_recursivo(i))
+    set i = i + 1
+:]
+
+@@ Verificar que ambos enfoques producen resultados idénticos
+mostrar("")
+mostrar("Verificando recursivo == iterativo para n = 0..15:")
+entero verificar = 0
+booleano todo_igual = verdadero
+mientras verificar <= 15 [:
+    si fib_recursivo(verificar) != fib_iterativo(verificar) [:
+        set todo_igual = falso
+    :]
+    set verificar = verificar + 1
+:]
+mostrar("  Todo igual: " + todo_igual)

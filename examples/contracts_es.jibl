@@ -1,0 +1,73 @@
+code español
+
+@@@
+    Contratos — requiere y garantiza.
+    requiere:  se verifica antes de ejecutar el cuerpo de la función.
+    garantiza: se verifica antes de retornar; __result está ligado al valor de retorno.
+@@@
+
+@@ División entera con precondición
+func entero dividir(entero a, entero b) retorna entero
+    requiere b != 0
+[:
+    retorno a / b
+:]
+
+@@ Valor absoluto — la postcondición garantiza un resultado no negativo
+func entero valor_abs(entero n) retorna entero
+    garantiza __result >= 0
+[:
+    si n < 0 [:
+        retorno 0 - n
+    :]
+    retorno n
+:]
+
+@@ Acotamiento — precondición y postcondición combinadas
+func entero acotar(entero val, entero min_val, entero max_val) retorna entero
+    requiere min_val <= max_val
+    garantiza __result >= min_val
+    garantiza __result <= max_val
+[:
+    si val < min_val [:
+        retorno min_val
+    :]
+    si val > max_val [:
+        retorno max_val
+    :]
+    retorno val
+:]
+
+@@ Potencia — requiere un exponente no negativo
+func entero potencia(entero base, entero exp) retorna entero
+    requiere exp >= 0
+[:
+    si exp == 0 [:
+        retorno 1
+    :]
+    entero resultado_val = 1
+    entero i = 0
+    mientras i < exp [:
+        set resultado_val = resultado_val * base
+        set i = i + 1
+    :]
+    retorno resultado_val
+:]
+
+@@ ---- Ejecución de ejemplos ----
+
+mostrar("dividir(10, 2)        = " + dividir(10, 2))
+mostrar("dividir(17, 5)        = " + dividir(17, 5))
+
+mostrar("valor_abs(-42)        = " + valor_abs(-42))
+mostrar("valor_abs(7)          = " + valor_abs(7))
+
+mostrar("acotar(200, 0, 100)   = " + acotar(200, 0, 100))
+mostrar("acotar(-5,  0, 100)   = " + acotar(-5, 0, 100))
+mostrar("acotar(50,  0, 100)   = " + acotar(50, 0, 100))
+
+mostrar("potencia(2, 10)       = " + potencia(2, 10))
+mostrar("potencia(3, 0)        = " + potencia(3, 0))
+
+@@ Descomentar la siguiente línea activaría el contrato requiere:
+@@ entero malo = dividir(5, 0)

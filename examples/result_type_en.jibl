@@ -1,5 +1,15 @@
 code english
 
+@@@
+    Error handling with result<T,E>.
+    ok(value)    — success path
+    error(msg)   — failure path
+    r.ok         — bool indicating success
+    r.value      — value on the success path
+    r.error      — message on the failure path
+@@@
+
+@@ Safe division — returns an error instead of crashing
 func result<int, string> safe_divide(int a, int b) returns result<int, string> [:
     if b == 0 [:
         return error("division by zero")
@@ -7,16 +17,75 @@ func result<int, string> safe_divide(int a, int b) returns result<int, string> [
     return ok(a / b)
 :]
 
-result<int, string> r = safe_divide(10, 2)
-if r.ok [:
-    print("Result: " + r.value)
-:] else [:
-    print("Error: " + r.error)
+@@ Integer square root — returns an error for negatives or non-perfect-squares
+func result<int, string> integer_sqrt(int n) returns result<int, string> [:
+    if n < 0 [:
+        return error("square root of a negative number")
+    :]
+    if n == 0 [:
+        return ok(0)
+    :]
+    int estimate = 1
+    while estimate * estimate < n [:
+        set estimate = estimate + 1
+    :]
+    if estimate * estimate == n [:
+        return ok(estimate)
+    :]
+    return error("not a perfect square: " + n)
 :]
 
-result<int, string> bad = safe_divide(5, 0)
-if bad.ok [:
-    print("Should not reach here")
+@@ ---- Success paths ----
+
+result<int, string> r1 = safe_divide(20, 4)
+if r1.ok [:
+    print("20 / 4 = " + r1.value)
 :] else [:
-    print("Caught error: " + bad.error)
+    print("Error: " + r1.error)
+:]
+
+result<int, string> r2 = integer_sqrt(49)
+if r2.ok [:
+    print("sqrt(49) = " + r2.value)
+:] else [:
+    print("Error: " + r2.error)
+:]
+
+@@ ---- Error paths ----
+
+result<int, string> r3 = safe_divide(5, 0)
+if r3.ok [:
+    print("Should not reach here.")
+:] else [:
+    print("Caught error: " + r3.error)
+:]
+
+result<int, string> r4 = integer_sqrt(-16)
+if r4.ok [:
+    print("Should not reach here.")
+:] else [:
+    print("Caught error: " + r4.error)
+:]
+
+result<int, string> r5 = integer_sqrt(10)
+if r5.ok [:
+    print("Should not reach here.")
+:] else [:
+    print("Caught error: " + r5.error)
+:]
+
+@@ ---- Chaining results ----
+
+@@ Compute (100 / x) then its integer square root, propagating errors
+int x = 25
+result<int, string> quotient = safe_divide(100, x)
+if quotient.ok [:
+    result<int, string> root = integer_sqrt(quotient.value)
+    if root.ok [:
+        print("sqrt(100 / " + x + ") = " + root.value)
+    :] else [:
+        print("sqrt error: " + root.error)
+    :]
+:] else [:
+    print("divide error: " + quotient.error)
 :]

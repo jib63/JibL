@@ -1,0 +1,141 @@
+code english
+
+@@@
+    JibL Language Tour
+    Demonstrates every language feature in one file:
+    all types, constants, multiline strings, comments,
+    arithmetic, comparisons, boolean logic, if/else,
+    while loops, recursion, contracts (requires/ensures),
+    result<T,E> error handling, arrays, and string formatting.
+@@@
+
+@@ ---- Constants and primitive types ----
+
+const string COURSE = "Introduction to JibL"
+const int PASSING_SCORE = 60
+
+int student_count = 0
+float class_total = 0.0
+bool grading_done = false
+
+string header = """
+==================================
+  Grade Book: """ + COURSE + """
+=================================="""
+
+print(header)
+
+@@ ---- Recursive function with contract ----
+
+func int factorial(int n) returns int
+    requires n >= 0
+[:
+    if n <= 1 [:
+        return 1
+    :]
+    return n * factorial(n - 1)
+:]
+
+print("5! = " + factorial(5))
+
+@@ ---- Functions with requires and ensures ----
+
+func string classify(int score) returns string
+    requires score >= 0
+    requires score <= 100
+[:
+    if score >= 90 [:
+        return "A — Excellent"
+    :]
+    if score >= 80 [:
+        return "B — Good"
+    :]
+    if score >= 70 [:
+        return "C — Average"
+    :]
+    if score >= PASSING_SCORE [:
+        return "D — Passing"
+    :]
+    return "F — Failing"
+:]
+
+func float average(float sum, int n) returns float
+    requires n > 0
+    ensures __result >= 0.0
+[:
+    return sum / n
+:]
+
+@@ ---- result<T,E> error handling ----
+
+func result<float, string> safe_avg(int[] scores) returns result<float, string> [:
+    if len(scores) == 0 [:
+        return error("no scores to average")
+    :]
+    float sum = 0.0
+    int i = 0
+    while i < len(scores) [:
+        set sum = sum + scores[i]
+        set i = i + 1
+    :]
+    return ok(average(sum, len(scores)))
+:]
+
+@@ ---- Array operations and while loop ----
+
+int[] grades = [88, 74, 95, 61, 82, 70, 55, 91]
+
+print("Students enrolled: " + len(grades))
+print("")
+
+@@ Print each grade with its letter and pass/fail status
+while student_count < len(grades) [:
+    int score = grades[student_count]
+    string letter = classify(score)
+    bool passing = score >= PASSING_SCORE
+    print("  Student " + (student_count + 1) + ": " + score + "  " + letter + "  passing=" + passing)
+    set student_count = student_count + 1
+:]
+
+@@ Append a late submission and recount
+set grades = append(grades, 78)
+print("")
+print("Late submission added. Total students: " + len(grades))
+
+@@ Compute class average via result type
+result<float, string> avg = safe_avg(grades)
+if avg.ok [:
+    print("Class average: " + avg.value)
+    bool good_average = avg.value >= 70.0
+    bool large_class = len(grades) > 5
+
+    if large_class and good_average [:
+        print("Large class with a good average — well done!")
+    :] else [:
+        if not good_average [:
+            print("Class average needs improvement.")
+        :]
+    :]
+:] else [:
+    print("Error computing average: " + avg.error)
+:]
+
+@@ Test error path with an empty array
+result<float, string> empty_avg = safe_avg([])
+if empty_avg.ok [:
+    print("Should not reach here.")
+:] else [:
+    print("Correctly caught: " + empty_avg.error)
+:]
+
+@@ ---- Boolean operators ----
+
+bool all_present = student_count > 0
+bool course_active = not grading_done
+
+if all_present and course_active [:
+    print("Course is active with " + student_count + " students.")
+:]
+
+set grading_done = true
+print("Grading complete: " + grading_done)

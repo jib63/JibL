@@ -2,13 +2,30 @@ code english
 
 @@@
     AI ask() example.
-    Requires: JIBL_AI_PROVIDER and JIBL_AI_KEY environment variables.
-    Example:
+    Requires: set the following environment variables:
         export JIBL_AI_PROVIDER=anthropic
         export JIBL_AI_KEY=sk-ant-...
+        export JIBL_AI_MODEL=claude-sonnet-4-6   (optional)
+    Then run:
         ./jibl examples/ai_ask_en.jibl
 @@@
 
-ai_response r = ask("In one sentence, what is a programming language?")
-print("AI says: " + r.content)
-print("Model: " + r.model)
+@@ Simple question
+ai_response r1 = ask("In one sentence, what is a programming language?")
+print("Question 1:")
+print("  " + r1.content)
+print("  Model: " + r1.model)
+print("")
+
+@@ Multi-part question
+ai_response r2 = ask("Give me three tips for writing readable code.")
+print("Question 2:")
+print("  " + r2.content)
+print("")
+
+@@ Use a variable inside the prompt
+string topic = "recursion in computer science"
+ai_response r3 = ask("Briefly explain " + topic + " with an example.")
+print("Question 3 (topic: " + topic + "):")
+print("  " + r3.content)
+print("  Tokens used: " + r3.tokens)

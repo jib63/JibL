@@ -1,0 +1,31 @@
+code français
+
+@@@
+    Exemple d'appel IA avec demander().
+    Prérequis : définir les variables d'environnement suivantes :
+        export JIBL_AI_PROVIDER=anthropic
+        export JIBL_AI_KEY=sk-ant-...
+        export JIBL_AI_MODEL=claude-sonnet-4-6   (optionnel)
+    Puis lancer :
+        ./jibl examples/ai_ask_fr.jibl
+@@@
+
+@@ Question simple
+reponse_ia rep1 = demander("En une phrase, qu'est-ce qu'un langage de programmation ?")
+afficher("Question 1 :")
+afficher("  " + rep1.content)
+afficher("  Modèle : " + rep1.model)
+afficher("")
+
+@@ Question en français — le LLM répond dans la langue de la question
+reponse_ia rep2 = demander("Donne-moi trois conseils pour écrire du code lisible.")
+afficher("Question 2 :")
+afficher("  " + rep2.content)
+afficher("")
+
+@@ Utiliser une variable dans la question
+chaine sujet = "la récursivité en informatique"
+reponse_ia rep3 = demander("Explique brièvement " + sujet + " avec un exemple.")
+afficher("Question 3 (sujet : " + sujet + ") :")
+afficher("  " + rep3.content)
+afficher("  Tokens utilisés : " + rep3.tokens)

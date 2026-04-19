@@ -1,0 +1,69 @@
+code français
+
+@@ Opérations sur les tableaux : déclaration, indexation, ajouter, longueur, itération
+
+@@ ---- Déclaration et accès ----
+
+entier[] scores = [10, 20, 30, 40, 50]
+afficher("Longueur initiale : " + longueur(scores))
+afficher("Premier élément   : " + scores[0])
+afficher("Dernier élément   : " + scores[longueur(scores) - 1])
+
+@@ ---- Ajout d'éléments ----
+
+set scores = ajouter(scores, 60)
+set scores = ajouter(scores, 70)
+afficher("Après ajout de 60 et 70, longueur : " + longueur(scores))
+
+@@ ---- Itération avec tantque ----
+
+afficher("")
+afficher("Tous les scores :")
+entier i = 0
+tantque i < longueur(scores) [:
+    afficher("  scores[" + i + "] = " + scores[i])
+    set i = i + 1
+:]
+
+@@ ---- Recherche du minimum et du maximum ----
+
+entier min_val = scores[0]
+entier max_val = scores[0]
+entier idx = 1
+tantque idx < longueur(scores) [:
+    si scores[idx] < min_val [:
+        set min_val = scores[idx]
+    :]
+    si scores[idx] > max_val [:
+        set max_val = scores[idx]
+    :]
+    set idx = idx + 1
+:]
+afficher("")
+afficher("Minimum : " + min_val)
+afficher("Maximum : " + max_val)
+
+@@ ---- Calcul de la somme et de la moyenne ----
+
+decimal somme = 0.0
+entier j = 0
+tantque j < longueur(scores) [:
+    set somme = somme + scores[j]
+    set j = j + 1
+:]
+decimal moyenne = somme / longueur(scores)
+afficher("Somme   : " + somme)
+afficher("Moyenne : " + moyenne)
+
+@@ ---- Tableaux de chaînes ----
+
+chaine[] jours = ["lundi", "mardi", "mercredi", "jeudi", "vendredi"]
+afficher("")
+afficher("Jours ouvrés :")
+entier k = 0
+tantque k < longueur(jours) [:
+    afficher("  " + (k + 1) + ". " + jours[k])
+    set k = k + 1
+:]
+set jours = ajouter(jours, "samedi")
+afficher("Après ajout du samedi, longueur : " + longueur(jours))

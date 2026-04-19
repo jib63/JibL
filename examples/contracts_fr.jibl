@@ -1,0 +1,73 @@
+code français
+
+@@@
+    Contrats — necessite et garantit.
+    necessite : vérifié avant l'exécution du corps de la fonction.
+    garantit  : vérifié avant le retour ; __result est lié à la valeur retournée.
+@@@
+
+@@ Division entière avec une précondition
+fonc entier diviser(entier a, entier b) retourne entier
+    necessite b != 0
+[:
+    retour a / b
+:]
+
+@@ Valeur absolue — la postcondition garantit un résultat non négatif
+fonc entier valeur_abs(entier n) retourne entier
+    garantit __result >= 0
+[:
+    si n < 0 [:
+        retour 0 - n
+    :]
+    retour n
+:]
+
+@@ Borne — précondition et postcondition combinées
+fonc entier borner(entier val, entier min_val, entier max_val) retourne entier
+    necessite min_val <= max_val
+    garantit __result >= min_val
+    garantit __result <= max_val
+[:
+    si val < min_val [:
+        retour min_val
+    :]
+    si val > max_val [:
+        retour max_val
+    :]
+    retour val
+:]
+
+@@ Puissance — requiert un exposant non négatif
+fonc entier puissance(entier base, entier exp) retourne entier
+    necessite exp >= 0
+[:
+    si exp == 0 [:
+        retour 1
+    :]
+    entier resultat_val = 1
+    entier i = 0
+    tantque i < exp [:
+        set resultat_val = resultat_val * base
+        set i = i + 1
+    :]
+    retour resultat_val
+:]
+
+@@ ---- Exécution des exemples ----
+
+afficher("diviser(10, 2)        = " + diviser(10, 2))
+afficher("diviser(17, 5)        = " + diviser(17, 5))
+
+afficher("valeur_abs(-42)       = " + valeur_abs(-42))
+afficher("valeur_abs(7)         = " + valeur_abs(7))
+
+afficher("borner(200, 0, 100)   = " + borner(200, 0, 100))
+afficher("borner(-5,  0, 100)   = " + borner(-5, 0, 100))
+afficher("borner(50,  0, 100)   = " + borner(50, 0, 100))
+
+afficher("puissance(2, 10)      = " + puissance(2, 10))
+afficher("puissance(3, 0)       = " + puissance(3, 0))
+
+@@ Décommenter la ligne suivante déclencherait le contrat necessite :
+@@ entier mauvais = diviser(5, 0)

@@ -1,0 +1,141 @@
+code español
+
+@@@
+    Recorrido por el lenguaje JibL
+    Demuestra todas las funcionalidades del lenguaje:
+    tipos, constantes, cadenas multilínea, comentarios,
+    aritmética, comparaciones, lógica booleana, si/sino,
+    bucles mientras, recursión, contratos (requiere/garantiza),
+    manejo de errores resultado<T,E>, arreglos y formateo de cadenas.
+@@@
+
+@@ ---- Constantes y tipos primitivos ----
+
+const cadena CURSO = "Introducción a JibL"
+const entero NOTA_APROBADO = 60
+
+entero num_estudiantes = 0
+decimal total_clase = 0.0
+booleano calificacion_lista = falso
+
+cadena encabezado = """
+==================================
+  Libro de notas: """ + CURSO + """
+=================================="""
+
+mostrar(encabezado)
+
+@@ ---- Función recursiva con contrato ----
+
+func entero factorial(entero n) retorna entero
+    requiere n >= 0
+[:
+    si n <= 1 [:
+        retorno 1
+    :]
+    retorno n * factorial(n - 1)
+:]
+
+mostrar("5! = " + factorial(5))
+
+@@ ---- Funciones con requiere y garantiza ----
+
+func cadena clasificar(entero nota) retorna cadena
+    requiere nota >= 0
+    requiere nota <= 100
+[:
+    si nota >= 90 [:
+        retorno "A — Sobresaliente"
+    :]
+    si nota >= 80 [:
+        retorno "B — Notable"
+    :]
+    si nota >= 70 [:
+        retorno "C — Bien"
+    :]
+    si nota >= NOTA_APROBADO [:
+        retorno "D — Suficiente"
+    :]
+    retorno "F — Insuficiente"
+:]
+
+func decimal promedio(decimal suma, entero n) retorna decimal
+    requiere n > 0
+    garantiza __result >= 0.0
+[:
+    retorno suma / n
+:]
+
+@@ ---- Manejo de errores con resultado<T,E> ----
+
+func resultado<decimal, cadena> prom_seguro(entero[] notas) retorna resultado<decimal, cadena> [:
+    si longitud(notas) == 0 [:
+        retorno error("no hay notas para calcular")
+    :]
+    decimal suma = 0.0
+    entero i = 0
+    mientras i < longitud(notas) [:
+        set suma = suma + notas[i]
+        set i = i + 1
+    :]
+    retorno ok(promedio(suma, longitud(notas)))
+:]
+
+@@ ---- Operaciones con arreglos y bucle mientras ----
+
+entero[] notas = [88, 74, 95, 61, 82, 70, 55, 91]
+
+mostrar("Estudiantes inscritos: " + longitud(notas))
+mostrar("")
+
+@@ Mostrar cada nota con su clasificación y estado
+mientras num_estudiantes < longitud(notas) [:
+    entero nota = notas[num_estudiantes]
+    cadena letra = clasificar(nota)
+    booleano aprobado = nota >= NOTA_APROBADO
+    mostrar("  Estudiante " + (num_estudiantes + 1) + ": " + nota + "  " + letra + "  aprobado=" + aprobado)
+    set num_estudiantes = num_estudiantes + 1
+:]
+
+@@ Agregar una entrega tardía
+set notas = agregar(notas, 78)
+mostrar("")
+mostrar("Entrega tardía agregada. Total estudiantes: " + longitud(notas))
+
+@@ Calcular promedio de clase mediante tipo resultado
+resultado<decimal, cadena> prom = prom_seguro(notas)
+si prom.ok [:
+    mostrar("Promedio de clase: " + prom.value)
+    booleano buen_promedio = prom.value >= 70.0
+    booleano clase_grande = longitud(notas) > 5
+
+    si clase_grande y buen_promedio [:
+        mostrar("Clase grande con buen promedio — ¡muy bien!")
+    :] sino [:
+        si no buen_promedio [:
+            mostrar("El promedio de la clase necesita mejora.")
+        :]
+    :]
+:] sino [:
+    mostrar("Error al calcular el promedio: " + prom.error)
+:]
+
+@@ Probar el camino de error con arreglo vacío
+resultado<decimal, cadena> prom_vacio = prom_seguro([])
+si prom_vacio.ok [:
+    mostrar("No debería llegar aquí.")
+:] sino [:
+    mostrar("Error capturado correctamente: " + prom_vacio.error)
+:]
+
+@@ ---- Operadores booleanos ----
+
+booleano hay_estudiantes = num_estudiantes > 0
+booleano curso_activo = no calificacion_lista
+
+si hay_estudiantes y curso_activo [:
+    mostrar("Curso activo con " + num_estudiantes + " estudiantes.")
+:]
+
+set calificacion_lista = verdadero
+mostrar("Calificación completa: " + calificacion_lista)

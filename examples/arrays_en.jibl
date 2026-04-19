@@ -1,18 +1,69 @@
 code english
 
-@@ Array operations example
+@@ Array operations: declaration, indexing, append, len, iteration
+
+@@ ---- Declaration and access ----
 
 int[] scores = [10, 20, 30, 40, 50]
-print("Length: " + len(scores))
-print("First: " + scores[0])
+print("Initial length : " + len(scores))
+print("First element  : " + scores[0])
+print("Last element   : " + scores[len(scores) - 1])
 
-@@ Append new element
+@@ ---- Appending elements ----
+
 set scores = append(scores, 60)
-print("After append, length: " + len(scores))
+set scores = append(scores, 70)
+print("After appending 60 and 70, length: " + len(scores))
 
-@@ Iterate with while
+@@ ---- Iteration with while ----
+
+print("")
+print("All scores:")
 int i = 0
 while i < len(scores) [:
-    print("scores[" + i + "] = " + scores[i])
+    print("  scores[" + i + "] = " + scores[i])
     set i = i + 1
 :]
+
+@@ ---- Finding minimum and maximum ----
+
+int min_val = scores[0]
+int max_val = scores[0]
+int idx = 1
+while idx < len(scores) [:
+    if scores[idx] < min_val [:
+        set min_val = scores[idx]
+    :]
+    if scores[idx] > max_val [:
+        set max_val = scores[idx]
+    :]
+    set idx = idx + 1
+:]
+print("")
+print("Minimum : " + min_val)
+print("Maximum : " + max_val)
+
+@@ ---- Sum and average ----
+
+float total = 0.0
+int j = 0
+while j < len(scores) [:
+    set total = total + scores[j]
+    set j = j + 1
+:]
+float avg = total / len(scores)
+print("Sum     : " + total)
+print("Average : " + avg)
+
+@@ ---- String arrays ----
+
+string[] days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+print("")
+print("Weekdays:")
+int k = 0
+while k < len(days) [:
+    print("  " + (k + 1) + ". " + days[k])
+    set k = k + 1
+:]
+set days = append(days, "Saturday")
+print("After appending Saturday, length: " + len(days))

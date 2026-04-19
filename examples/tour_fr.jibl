@@ -1,0 +1,141 @@
+code français
+
+@@@
+    Tour du langage JibL
+    Démontre toutes les fonctionnalités du langage :
+    types, constantes, chaînes multilignes, commentaires,
+    arithmétique, comparaisons, logique booléenne, si/sinon,
+    boucles tantque, récursion, contrats (necessite/garantit),
+    gestion d'erreur resultat<T,E>, tableaux et formatage de chaînes.
+@@@
+
+@@ ---- Constantes et types primitifs ----
+
+const chaine COURS = "Introduction à JibL"
+const entier SCORE_SUFFISANT = 60
+
+entier nb_etudiants = 0
+decimal total_classe = 0.0
+booleen notation_terminee = faux
+
+chaine entete = """
+==================================
+  Cahier de notes : """ + COURS + """
+=================================="""
+
+afficher(entete)
+
+@@ ---- Fonction récursive avec contrat ----
+
+fonc entier factorielle(entier n) retourne entier
+    necessite n >= 0
+[:
+    si n <= 1 [:
+        retour 1
+    :]
+    retour n * factorielle(n - 1)
+:]
+
+afficher("5! = " + factorielle(5))
+
+@@ ---- Fonctions avec necessite et garantit ----
+
+fonc chaine classer(entier score) retourne chaine
+    necessite score >= 0
+    necessite score <= 100
+[:
+    si score >= 90 [:
+        retour "A — Très bien"
+    :]
+    si score >= 80 [:
+        retour "B — Bien"
+    :]
+    si score >= 70 [:
+        retour "C — Assez bien"
+    :]
+    si score >= SCORE_SUFFISANT [:
+        retour "D — Passable"
+    :]
+    retour "F — Insuffisant"
+:]
+
+fonc decimal moyenne(decimal somme, entier n) retourne decimal
+    necessite n > 0
+    garantit __result >= 0.0
+[:
+    retour somme / n
+:]
+
+@@ ---- Gestion d'erreur avec resultat<T,E> ----
+
+fonc resultat<decimal, chaine> moy_securisee(entier[] notes) retourne resultat<decimal, chaine> [:
+    si longueur(notes) == 0 [:
+        retour error("aucune note à calculer")
+    :]
+    decimal somme = 0.0
+    entier i = 0
+    tantque i < longueur(notes) [:
+        set somme = somme + notes[i]
+        set i = i + 1
+    :]
+    retour ok(moyenne(somme, longueur(notes)))
+:]
+
+@@ ---- Opérations sur les tableaux et boucle tantque ----
+
+entier[] notes = [88, 74, 95, 61, 82, 70, 55, 91]
+
+afficher("Étudiants inscrits : " + longueur(notes))
+afficher("")
+
+@@ Afficher chaque note avec sa mention et son statut
+tantque nb_etudiants < longueur(notes) [:
+    entier score = notes[nb_etudiants]
+    chaine mention = classer(score)
+    booleen reussi = score >= SCORE_SUFFISANT
+    afficher("  Étudiant " + (nb_etudiants + 1) + " : " + score + "  " + mention + "  reçu=" + reussi)
+    set nb_etudiants = nb_etudiants + 1
+:]
+
+@@ Ajouter un devoir rendu en retard
+set notes = ajouter(notes, 78)
+afficher("")
+afficher("Devoir tardif ajouté. Total étudiants : " + longueur(notes))
+
+@@ Calculer la moyenne via le type résultat
+resultat<decimal, chaine> moy = moy_securisee(notes)
+si moy.ok [:
+    afficher("Moyenne de la classe : " + moy.value)
+    booleen bonne_moyenne = moy.value >= 70.0
+    booleen grande_classe = longueur(notes) > 5
+
+    si grande_classe et bonne_moyenne [:
+        afficher("Grande classe avec une bonne moyenne — bravo !")
+    :] sinon [:
+        si non bonne_moyenne [:
+            afficher("La moyenne de la classe doit être améliorée.")
+        :]
+    :]
+:] sinon [:
+    afficher("Erreur lors du calcul de la moyenne : " + moy.error)
+:]
+
+@@ Tester le chemin d'erreur avec un tableau vide
+resultat<decimal, chaine> moy_vide = moy_securisee([])
+si moy_vide.ok [:
+    afficher("Ne devrait pas arriver ici.")
+:] sinon [:
+    afficher("Erreur correctement capturée : " + moy_vide.error)
+:]
+
+@@ ---- Opérateurs booléens ----
+
+booleen etudiants_presents = nb_etudiants > 0
+booleen cours_actif = non notation_terminee
+
+si etudiants_presents et cours_actif [:
+    afficher("Cours actif avec " + nb_etudiants + " étudiants.")
+:]
+
+set notation_terminee = vrai
+afficher("Notation terminée : " + notation_terminee)

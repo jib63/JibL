@@ -1,0 +1,69 @@
+code español
+
+@@ Operaciones con arreglos: declaración, indexación, agregar, longitud, iteración
+
+@@ ---- Declaración y acceso ----
+
+entero[] puntos = [10, 20, 30, 40, 50]
+mostrar("Longitud inicial : " + longitud(puntos))
+mostrar("Primer elemento  : " + puntos[0])
+mostrar("Último elemento  : " + puntos[longitud(puntos) - 1])
+
+@@ ---- Agregar elementos ----
+
+set puntos = agregar(puntos, 60)
+set puntos = agregar(puntos, 70)
+mostrar("Tras agregar 60 y 70, longitud: " + longitud(puntos))
+
+@@ ---- Iteración con mientras ----
+
+mostrar("")
+mostrar("Todos los puntos:")
+entero i = 0
+mientras i < longitud(puntos) [:
+    mostrar("  puntos[" + i + "] = " + puntos[i])
+    set i = i + 1
+:]
+
+@@ ---- Búsqueda del mínimo y máximo ----
+
+entero min_val = puntos[0]
+entero max_val = puntos[0]
+entero idx = 1
+mientras idx < longitud(puntos) [:
+    si puntos[idx] < min_val [:
+        set min_val = puntos[idx]
+    :]
+    si puntos[idx] > max_val [:
+        set max_val = puntos[idx]
+    :]
+    set idx = idx + 1
+:]
+mostrar("")
+mostrar("Mínimo : " + min_val)
+mostrar("Máximo : " + max_val)
+
+@@ ---- Cálculo de suma y promedio ----
+
+decimal suma = 0.0
+entero j = 0
+mientras j < longitud(puntos) [:
+    set suma = suma + puntos[j]
+    set j = j + 1
+:]
+decimal promedio = suma / longitud(puntos)
+mostrar("Suma      : " + suma)
+mostrar("Promedio  : " + promedio)
+
+@@ ---- Arreglos de cadenas ----
+
+cadena[] dias = ["lunes", "martes", "miércoles", "jueves", "viernes"]
+mostrar("")
+mostrar("Días laborales:")
+entero k = 0
+mientras k < longitud(dias) [:
+    mostrar("  " + (k + 1) + ". " + dias[k])
+    set k = k + 1
+:]
+set dias = agregar(dias, "sábado")
+mostrar("Tras agregar el sábado, longitud: " + longitud(dias))

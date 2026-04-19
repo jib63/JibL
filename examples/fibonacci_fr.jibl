@@ -1,0 +1,54 @@
+code français
+
+@@ Fibonacci — récursif et itératif, avec contrats
+
+@@ Approche récursive : élégante mais en O(2^n)
+fonc entier fib_recursif(entier n) retourne entier
+    necessite n >= 0
+[:
+    si n <= 1 [:
+        retour n
+    :]
+    retour fib_recursif(n - 1) + fib_recursif(n - 2)
+:]
+
+@@ Approche itérative : en O(n) avec une boucle tantque
+fonc entier fib_iteratif(entier n) retourne entier
+    necessite n >= 0
+[:
+    si n <= 1 [:
+        retour n
+    :]
+    entier precedent = 0
+    entier actuel = 1
+    entier etape = 2
+    tantque etape <= n [:
+        entier suivant = precedent + actuel
+        set precedent = actuel
+        set actuel = suivant
+        set etape = etape + 1
+    :]
+    retour actuel
+:]
+
+afficher("Suite de Fibonacci (11 premiers termes) :")
+afficher("")
+
+entier i = 0
+tantque i <= 10 [:
+    afficher("  fib(" + i + ") = " + fib_recursif(i))
+    set i = i + 1
+:]
+
+@@ Vérifier que les deux approches donnent des résultats identiques
+afficher("")
+afficher("Vérification récursif == itératif pour n = 0..15 :")
+entier verif = 0
+booleen tout_identique = vrai
+tantque verif <= 15 [:
+    si fib_recursif(verif) != fib_iteratif(verif) [:
+        set tout_identique = faux
+    :]
+    set verif = verif + 1
+:]
+afficher("  Tout identique : " + tout_identique)

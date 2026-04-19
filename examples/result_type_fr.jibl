@@ -1,0 +1,91 @@
+code français
+
+@@@
+    Gestion d'erreur avec resultat<T,E>.
+    ok(valeur)   — chemin de succès
+    error(msg)   — chemin d'échec
+    r.ok         — booleen indiquant le succès
+    r.value      — valeur en cas de succès
+    r.error      — message en cas d'échec
+@@@
+
+@@ Division sécurisée — retourne une erreur au lieu de planter
+fonc resultat<entier, chaine> division_securisee(entier a, entier b) retourne resultat<entier, chaine> [:
+    si b == 0 [:
+        retour error("division par zéro")
+    :]
+    retour ok(a / b)
+:]
+
+@@ Racine carrée entière — retourne une erreur pour les valeurs négatives
+fonc resultat<entier, chaine> racine_entiere(entier n) retourne resultat<entier, chaine> [:
+    si n < 0 [:
+        retour error("racine carrée d'un nombre négatif")
+    :]
+    si n == 0 [:
+        retour ok(0)
+    :]
+    entier estimation = 1
+    tantque estimation * estimation < n [:
+        set estimation = estimation + 1
+    :]
+    si estimation * estimation == n [:
+        retour ok(estimation)
+    :]
+    retour error("pas un carré parfait : " + n)
+:]
+
+@@ ---- Chemin de succès ----
+
+resultat<entier, chaine> r1 = division_securisee(20, 4)
+si r1.ok [:
+    afficher("20 / 4 = " + r1.value)
+:] sinon [:
+    afficher("Erreur : " + r1.error)
+:]
+
+resultat<entier, chaine> r2 = racine_entiere(49)
+si r2.ok [:
+    afficher("racine(49) = " + r2.value)
+:] sinon [:
+    afficher("Erreur : " + r2.error)
+:]
+
+@@ ---- Chemin d'erreur ----
+
+resultat<entier, chaine> r3 = division_securisee(5, 0)
+si r3.ok [:
+    afficher("Ne devrait pas arriver ici.")
+:] sinon [:
+    afficher("Erreur capturée : " + r3.error)
+:]
+
+resultat<entier, chaine> r4 = racine_entiere(-16)
+si r4.ok [:
+    afficher("Ne devrait pas arriver ici.")
+:] sinon [:
+    afficher("Erreur capturée : " + r4.error)
+:]
+
+resultat<entier, chaine> r5 = racine_entiere(10)
+si r5.ok [:
+    afficher("Ne devrait pas arriver ici.")
+:] sinon [:
+    afficher("Erreur capturée : " + r5.error)
+:]
+
+@@ ---- Chaîner les résultats ----
+
+@@ Calculer (100 / x) puis sa racine carrée, en propageant les erreurs
+entier x = 25
+resultat<entier, chaine> quotient = division_securisee(100, x)
+si quotient.ok [:
+    resultat<entier, chaine> racine = racine_entiere(quotient.value)
+    si racine.ok [:
+        afficher("racine(100 / " + x + ") = " + racine.value)
+    :] sinon [:
+        afficher("Erreur racine : " + racine.error)
+    :]
+:] sinon [:
+    afficher("Erreur division : " + quotient.error)
+:]

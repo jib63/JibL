@@ -1,0 +1,31 @@
+code español
+
+@@@
+    Ejemplo de consulta IA con preguntar().
+    Requisitos: definir las siguientes variables de entorno:
+        export JIBL_AI_PROVIDER=anthropic
+        export JIBL_AI_KEY=sk-ant-...
+        export JIBL_AI_MODEL=claude-sonnet-4-6   (opcional)
+    Luego ejecutar:
+        ./jibl examples/ai_ask_es.jibl
+@@@
+
+@@ Pregunta simple
+respuesta_ia resp1 = preguntar("En una oración, ¿qué es un lenguaje de programación?")
+mostrar("Pregunta 1:")
+mostrar("  " + resp1.content)
+mostrar("  Modelo: " + resp1.model)
+mostrar("")
+
+@@ Pregunta en español — el LLM responde en el idioma de la pregunta
+respuesta_ia resp2 = preguntar("Dame tres consejos para escribir código legible.")
+mostrar("Pregunta 2:")
+mostrar("  " + resp2.content)
+mostrar("")
+
+@@ Usar una variable en la pregunta
+cadena tema = "la recursión en informática"
+respuesta_ia resp3 = preguntar("Explica brevemente " + tema + " con un ejemplo.")
+mostrar("Pregunta 3 (tema: " + tema + "):")
+mostrar("  " + resp3.content)
+mostrar("  Tokens usados: " + resp3.tokens)

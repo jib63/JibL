@@ -1,15 +1,73 @@
 code english
 
-@@ Demonstrates requires / ensures contracts
+@@@
+    Contracts — requires and ensures.
+    requires: checked before the function body executes.
+    ensures:  checked before return; __result is bound to the return value.
+@@@
 
+@@ Integer division with a precondition
 func int divide(int a, int b) returns int
     requires b != 0
 [:
     return a / b
 :]
 
-int quotient = divide(10, 2)
-print("10 / 2 = " + quotient)
+@@ Absolute value — postcondition guarantees a non-negative result
+func int abs_val(int n) returns int
+    ensures __result >= 0
+[:
+    if n < 0 [:
+        return 0 - n
+    :]
+    return n
+:]
 
-@@ This call would trigger the requires contract violation:
+@@ Clamp — both precondition and postcondition
+func int clamp(int val, int lo, int hi) returns int
+    requires lo <= hi
+    ensures __result >= lo
+    ensures __result <= hi
+[:
+    if val < lo [:
+        return lo
+    :]
+    if val > hi [:
+        return hi
+    :]
+    return val
+:]
+
+@@ Power — requires a non-negative exponent, ensures result >= 1 when base > 0
+func int power(int base, int exp) returns int
+    requires exp >= 0
+[:
+    if exp == 0 [:
+        return 1
+    :]
+    int result_val = 1
+    int i = 0
+    while i < exp [:
+        set result_val = result_val * base
+        set i = i + 1
+    :]
+    return result_val
+:]
+
+@@ ---- Run examples ----
+
+print("divide(10, 2)    = " + divide(10, 2))
+print("divide(17, 5)    = " + divide(17, 5))
+
+print("abs_val(-42)     = " + abs_val(-42))
+print("abs_val(7)       = " + abs_val(7))
+
+print("clamp(200, 0, 100) = " + clamp(200, 0, 100))
+print("clamp(-5,  0, 100) = " + clamp(-5, 0, 100))
+print("clamp(50,  0, 100) = " + clamp(50, 0, 100))
+
+print("power(2, 10)     = " + power(2, 10))
+print("power(3, 0)      = " + power(3, 0))
+
+@@ Uncommenting the line below would trigger the requires contract:
 @@ int bad = divide(5, 0)

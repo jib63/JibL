@@ -1,0 +1,91 @@
+code español
+
+@@@
+    Manejo de errores con resultado<T,E>.
+    ok(valor)    — camino de éxito
+    error(msg)   — camino de fallo
+    r.ok         — booleano que indica éxito
+    r.value      — valor en caso de éxito
+    r.error      — mensaje en caso de fallo
+@@@
+
+@@ División segura — retorna error en lugar de fallar
+func resultado<entero, cadena> division_segura(entero a, entero b) retorna resultado<entero, cadena> [:
+    si b == 0 [:
+        retorno error("división por cero")
+    :]
+    retorno ok(a / b)
+:]
+
+@@ Raíz cuadrada entera — retorna error para valores negativos o no cuadrados perfectos
+func resultado<entero, cadena> raiz_entera(entero n) retorna resultado<entero, cadena> [:
+    si n < 0 [:
+        retorno error("raíz cuadrada de número negativo")
+    :]
+    si n == 0 [:
+        retorno ok(0)
+    :]
+    entero estimacion = 1
+    mientras estimacion * estimacion < n [:
+        set estimacion = estimacion + 1
+    :]
+    si estimacion * estimacion == n [:
+        retorno ok(estimacion)
+    :]
+    retorno error("no es un cuadrado perfecto: " + n)
+:]
+
+@@ ---- Camino de éxito ----
+
+resultado<entero, cadena> r1 = division_segura(20, 4)
+si r1.ok [:
+    mostrar("20 / 4 = " + r1.value)
+:] sino [:
+    mostrar("Error: " + r1.error)
+:]
+
+resultado<entero, cadena> r2 = raiz_entera(49)
+si r2.ok [:
+    mostrar("raiz(49) = " + r2.value)
+:] sino [:
+    mostrar("Error: " + r2.error)
+:]
+
+@@ ---- Camino de error ----
+
+resultado<entero, cadena> r3 = division_segura(5, 0)
+si r3.ok [:
+    mostrar("No debería llegar aquí.")
+:] sino [:
+    mostrar("Error capturado: " + r3.error)
+:]
+
+resultado<entero, cadena> r4 = raiz_entera(-16)
+si r4.ok [:
+    mostrar("No debería llegar aquí.")
+:] sino [:
+    mostrar("Error capturado: " + r4.error)
+:]
+
+resultado<entero, cadena> r5 = raiz_entera(10)
+si r5.ok [:
+    mostrar("No debería llegar aquí.")
+:] sino [:
+    mostrar("Error capturado: " + r5.error)
+:]
+
+@@ ---- Encadenar resultados ----
+
+@@ Calcular (100 / x) y luego su raíz cuadrada, propagando errores
+entero x = 25
+resultado<entero, cadena> cociente = division_segura(100, x)
+si cociente.ok [:
+    resultado<entero, cadena> raiz = raiz_entera(cociente.value)
+    si raiz.ok [:
+        mostrar("raiz(100 / " + x + ") = " + raiz.value)
+    :] sino [:
+        mostrar("Error raíz: " + raiz.error)
+    :]
+:] sino [:
+    mostrar("Error división: " + cociente.error)
+:]
